@@ -563,8 +563,8 @@ def mainCommand():
         size = psize.Psize()
         size.parseInput(outpath)
         size.runPsize(outpath)
-        async = 0  # No async files here!
-        input = inputgen.Input(outpath, size, method, async)
+        _async = 0  # No async files here!
+        input = inputgen.Input(outpath, size, method, _async)
         input.printInputFiles()
 
 
@@ -658,8 +658,8 @@ def mainCGI():
             size = psize.Psize()
             size.parseInput(pqrpath)
             size.runPsize(pqrpath)
-            async = 0  # No async files here!
-            myinput = inputgen.Input(pqrpath, size, method, async)
+            _async = 0  # No async files here!
+            myinput = inputgen.Input(pqrpath, size, method, _async)
             myinput.printInputFiles()
 
         endtime = time.time() - starttime

@@ -1553,7 +1553,7 @@ def pre_init(pdbfilename=None, ff=None, ligand=None, verbose=1):
     size = psize.Psize()
 
     method = ""
-    async=0
+    _async=0
     split = 0
     from . import inputgen_pKa
     igen = inputgen_pKa.inputGen(pdbfilename)

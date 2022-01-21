@@ -122,17 +122,17 @@ if __name__ == '__main__':
         if verbose: print("num_tors_div =", num_tors_div)
         print("Model %d calculated scores:" % ( cur_model_index + 1))
         #wt_dict['gauss 1'] = -0.035579
-    	print("    weighted gauss 1 = %6.6f " % ( cur_model['gauss 1']*wt_dict['gauss 1'])) 
+        print("    weighted gauss 1 = %6.6f " % ( cur_model['gauss 1']*wt_dict['gauss 1'])) 
         #wt_dict['gauss 2'] = -0.005156
-    	print("    weighted gauss 2 = %6.6f " % ( cur_model['gauss 2']*wt_dict['gauss 2']))
+        print("    weighted gauss 2 = %6.6f " % ( cur_model['gauss 2']*wt_dict['gauss 2']))
         #wt_dict['repulsion']= 0.840245
-    	print("    weighted repulsion = %6.6f " % ( cur_model['repulsion']*wt_dict['repulsion']))
+        print("    weighted repulsion = %6.6f " % ( cur_model['repulsion']*wt_dict['repulsion']))
         #wt_dict['hydrophobic'] = -0.035069
-    	print("    weighted hydrophobic = %6.6f " % ( cur_model['hydrophobic']*wt_dict['hydrophobic']))
+        print("    weighted hydrophobic = %6.6f " % ( cur_model['hydrophobic']*wt_dict['hydrophobic']))
         #wt_dict['Hydrogen'] = 0.0587439
-    	print("    weighted Hydrogen = %6.6f " %( cur_model['Hydrogen']*wt_dict['Hydrogen']))
-    	score = wt_dict['gauss 1']*cur_model['gauss 1'] + wt_dict['gauss 2']*cur_model['gauss 2'] + wt_dict['repulsion'] *cur_model ['repulsion']+ wt_dict['hydrophobic']*cur_model['hydrophobic'] + wt_dict['Hydrogen']*cur_model['Hydrogen'] 
-    	print("    score without num_tors_div for model %d is %6.6f " % ( cur_model_index+1, score))   
+        print("    weighted Hydrogen = %6.6f " %( cur_model['Hydrogen']*wt_dict['Hydrogen']))
+        score = wt_dict['gauss 1']*cur_model['gauss 1'] + wt_dict['gauss 2']*cur_model['gauss 2'] + wt_dict['repulsion'] *cur_model ['repulsion']+ wt_dict['hydrophobic']*cur_model['hydrophobic'] + wt_dict['Hydrogen']*cur_model['Hydrogen'] 
+        print("    score without num_tors_div for model %d is %6.6f " % ( cur_model_index+1, score))   
         #num_tors_div = 1+ wt_dict['num_tors_div']* vina_num_torsions #@@ vina ignored 2 of original 14 torsions
         #print "    num_tors_div = % 6.6f " % ( num_tors_div )
         w = 0.1 * ( wt_dict['num_tors_div'] + 1)
@@ -141,11 +141,11 @@ if __name__ == '__main__':
         final_score = score/(1 + w * vina_num_torsions/5.0)
         print("    Final_score (score divided by (1+w *vina_num_torsions/5.0)) is %6.6f " % (final_score))
         # rh empirical: print "    alternative final score (score * 0.568137) is ", score * 0.568137 
-    	cur_model['score'] = final_score
-    	#print "score for model %d",  cur_model_index+1, " is ", cur_model['score']
+        cur_model['score'] = final_score
+        #print "score for model %d",  cur_model_index+1, " is ", cur_model['score']
         #print "model %d:" %(cur_model_index+1)
-    	#print "   Final score is %6.6f " %( cur_model['score'])
+        #print "   Final score is %6.6f " %( cur_model['score'])
         print("    Affinity  is %6.6f " %( cur_model['Affinity'])) 
-    	#cur_model['score'] = final_score
+        #cur_model['score'] = final_score
     
     

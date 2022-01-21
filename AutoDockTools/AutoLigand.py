@@ -409,7 +409,7 @@ def setstate(worstpoint,flood):
 	tag = [0,0,0,0,0,0]
 	nborcoords = []
 	neighbors = 0
- 	contig = 0  # defult is removable
+	contig = 0  # defult is removable
 	planes = 0
 	x = worstpoint[1]
 	y = worstpoint[2]
@@ -1022,7 +1022,7 @@ for meshpoint in mesh:
 
 			# check to see if removing worstpoint from flood breaks continuity
 			#   look at state varible contig: 0 = removable, 1 = non-removable
- 			contig = setstate(worstpoint,flood)
+			contig = setstate(worstpoint,flood)
 			if start_point_flag == 2:
 				if worstpoint == loadpoint1:
 					contig = 1
