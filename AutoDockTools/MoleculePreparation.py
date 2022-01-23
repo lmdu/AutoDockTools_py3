@@ -477,14 +477,14 @@ class ReceptorPreparation(AutoDockMoleculePreparation):
                     cleanup='nphs_lps_waters_nonstdres',
                     outputfilename=None, debug=False,
                     preserved={},
-                    delete_single_nonstd_residues=False, dict=None):
+                    delete_single_nonstd_residues=False, dict_file=None):
 
         AutoDockMoleculePreparation.__init__(self, molecule, mode, repairs,
                                             charges_to_add, cleanup,
                                             debug=debug,
                                             delete_single_nonstd_residues=False)
 
-        self.dict = dict
+        self.dict_file = dict_file
         if len(preserved):
             for atom, chargeList in list(preserved.items()):
                 atom._charges[chargeList[0]] = chargeList[1]
@@ -563,10 +563,10 @@ class AD4ReceptorPreparation(AutoDockMoleculePreparation):
                     outputfilename=None, debug=False,
                     version=4, preserved={},
                     delete_single_nonstd_residues=False,
-                    dict=None):
+                    dict_file=None):
 
 
-        self.dict = dict
+        self.dict_file = dict_file
         AutoDockMoleculePreparation.__init__(self, molecule,
                         mode=mode, repairs=repairs,
                         charges_to_add=charges_to_add, cleanup=cleanup,
@@ -605,13 +605,13 @@ class AD4ReceptorPreparation(AutoDockMoleculePreparation):
         #Atom level would allow multiple molecules in Receptor, at no price
         self.writer.write(mol, outputfilename)
         if self.debug: print("wrote ", mol.name, " to ", outputfilename)
-        if self.dict is not None:
-            if not os.path.exists(self.dict):
-                fptr = open(self.dict, 'a')
+        if self.dict_file is not None:
+            if not os.path.exists(self.dict_file):
+                fptr = open(self.dict_file, 'a')
                 ostr = "summary = d = {}\n"
                 fptr.write(ostr)
             else:
-                fptr = open(self.dict, 'a')
+                fptr = open(self.dict_file, 'a')
             # setup dict
             ostr = "d['" + self.molecule.name +"'] = {"
             # autodock_element
@@ -764,7 +764,7 @@ class LigandPreparation(AutoDockMoleculePreparation):
     def __init__(self, molecule, mode='automatic', repairs='hydrogens_bonds',
                     charges_to_add='gasteiger', cleanup='nphs_lps',
                     allowed_bonds='backbone',  #amide + guanidinium off @@ backbone on (5/2014)
-                    root='auto', outputfilename=None, dict=None, debug=False,
+                    root='auto', outputfilename=None, dict_file=None, debug=False,
                     check_for_fragments=False, bonds_to_inactivate=[],
                     inactivate_all_torsions=False,
                     version=3, limit_torsions=False,
@@ -803,7 +803,7 @@ class LigandPreparation(AutoDockMoleculePreparation):
         self.aromCs = self.ACM.setAromaticCarbons(molecule)
 
         #optional output summary filename to write types and number of torsions
-        self.dict = dict
+        self.dict_file = dict_file
 
         self.outputfilename = outputfilename
         #if mode is 'automatic': write outputfile now
@@ -902,13 +902,14 @@ class LigandPreparation(AutoDockMoleculePreparation):
         self.writer.write(mol, outputfilename)
         self.outputfilename = outputfilename
         #print 'back from writing'
-        if self.dict is not None:
-            if not os.path.exists(self.dict):
-                fptr = open(self.dict, 'a')
+        if self.dict_file is not None:
+            print(self.dict_file)
+            if not os.path.exists(self.dict_file):
+                fptr = open(self.dict_file, 'a')
                 ostr = "summary = d = {}\n"
                 fptr.write(ostr)
             else:
-                fptr = open(self.dict, 'a')
+                fptr = open(self.dict_file, 'a')
             type_dict = {}
             for a in self.molecule.allAtoms:
                 type_dict[a.autodock_element] = 1
@@ -1004,7 +1005,7 @@ class AD4LigandPreparation(LigandPreparation):
     def __init__(self, molecule, mode='automatic', repairs='checkhydrogens',
                     charges_to_add='gasteiger', cleanup='nphs_lps_waters_nonstdres',
                     allowed_bonds='backbone',  #@@ amide, guanidinium off, backbone on (5/2014)
-                    root='auto', outputfilename=None, dict=None, debug=False,
+                    root='auto', outputfilename=None, dict_file=None, debug=False,
                     check_for_fragments=False, bonds_to_inactivate=[],
                     inactivate_all_torsions=False,
                     version=4, typeAtoms=True, limit_torsion_number=False,
@@ -1023,7 +1024,7 @@ class AD4LigandPreparation(LigandPreparation):
                     repairs=repairs, charges_to_add=charges_to_add,
                     cleanup=cleanup, allowed_bonds=allowed_bonds,
                     root=root, outputfilename=outputfilename,
-                    dict=dict, debug=debug,
+                    dict_file=dict_file, debug=debug,
                     check_for_fragments=check_for_fragments,
                     bonds_to_inactivate=bonds_to_inactivate,
                     inactivate_all_torsions=inactivate_all_torsions,
@@ -1847,33 +1848,33 @@ class RotatableBondManager:
         if not len(atoms.bonds[0]):
             mol.buildBondsByDistance()
         ADBC = self.ADBC = AutoDockBondClassifier(detectAll=self.detectAll)
-        dict =self.dict = ADBC.classify(mol.allAtoms.bonds[0])
+        _dict =self._dict = ADBC.classify(mol.allAtoms.bonds[0])
         #turn everything off
         mol.allAtoms.bonds[0].possibleTors = 0
         mol.allAtoms.bonds[0].activeTors = 0
         mol.allAtoms.bonds[0].leaf = 0
         mol.allAtoms.bonds[0].incycle = 0
         # restore appropriate categories:
-        if len(dict['leaf']):
-            dict['leaf'].leaf = 1
-        aromBnds = dict['aromatic']
-        if len(dict['cycle']):
-            dict['cycle'].incycle = 1
-        if len(dict['rotatable']):
-            if self.debug: print("len(dict['rotatable'])=", len(dict['rotatable']))
-            for b in dict['rotatable']:
+        if len(_dict['leaf']):
+            _dict['leaf'].leaf = 1
+        aromBnds = _dict['aromatic']
+        if len(_dict['cycle']):
+            _dict['cycle'].incycle = 1
+        if len(_dict['rotatable']):
+            if self.debug: print("len(dict['rotatable'])=", len(_dict['rotatable']))
+            for b in _dict['rotatable']:
                 #check for mistake
                 if b.incycle:
                     print("removing rotatable ERROR: bnd", b)
                     b.possibleTors = 0
                     b.activeTors = 0
-                    dict['rotatable'].remove(b)
-            dict['rotatable'].possibleTors = 1
-            dict['rotatable'].activeTors = 1
+                    _dict['rotatable'].remove(b)
+            _dict['rotatable'].possibleTors = 1
+            _dict['rotatable'].activeTors = 1
             #NB: this should set amide and ppbb
         #mol.guanidiniumbnds = BondSet()
         #self.set_guanidinium_torsions(allow_guanidinium_torsions)
-        for b in dict['guanidinium']:
+        for b in _dict['guanidinium']:
             if self.debug: print(b, ' ', b.bondOrder)
             if not b.incycle and not b.leaf and b.bondOrder==1:
                 if self.debug: print('set ', b,'.possible/active to 1/0')
@@ -1906,21 +1907,21 @@ class RotatableBondManager:
             mol.torscount = possible_tors_ct
         if self.debug:
             for b in rotatable_bnds:
-                if b not in dict['rotatable']:
+                if b not in _dict['rotatable']:
                     print("ERROR in rotatable_bnds set:")
                     print(b.atom1.full_name(), '-', b.atom2.full_name())
         if self.debug: print("set ", mol.name, ".torscount=", mol.torscount)
         #mol.TORSDOF = mol.torscount - len(dict['hydrogenRotators'])
-        mol.TORSDOF = possible_tors_ct - len(dict['hydrogenRotators'])
+        mol.TORSDOF = possible_tors_ct - len(_dict['hydrogenRotators'])
         mol.possible_tors = possible_tors_ct
         if self.debug:
-            for b in dict['hydrogenRotators']:
+            for b in _dict['hydrogenRotators']:
                 print("possible_tors_ct =", possible_tors_ct)
-                print("len(dict['hydrogenRotators']) =", len(dict['hydrogenRotators']))
+                print("len(dict['hydrogenRotators']) =", len(_dict['hydrogenRotators']))
                 print("set ", mol.name, ".TORSDOF=", mol.TORSDOF)
-        mol.amidebnds = dict['amide']
-        mol.ppbbbnds = dict['ppbb']
-        mol.guanidiniumbnds = dict['guanidinium']
+        mol.amidebnds = _dict['amide']
+        mol.ppbbbnds = _dict['ppbb']
+        mol.guanidiniumbnds = _dict['guanidinium']
         mol.processed_bonds = 1
 
 
@@ -2059,8 +2060,8 @@ class RotatableBondManager:
                     fb.append(b)
         #now to try to merge fragments, use lists of keys
         key_list = []
-        for dict in l:
-            key_list.append(list(dict.keys()))
+        for _dict in l:
+            key_list.append(list(_dict.keys()))
         #check each list of keys against following lists
         #if there are any duplications, merge current
         #into the following one..
@@ -2093,13 +2094,13 @@ class RotatableBondManager:
         max_ind = 0
         largest_fragment = {}
         ct = 0
-        for dict in l:
-            len_d = len(dict)
+        for _dict in l:
+            len_d = len(_dict)
             if len_d >0:
                 ct = ct + 1
             if len_d > max_ind:
-                max_ind = len(dict)
-                largest_fragment = dict
+                max_ind = len(_dict)
+                largest_fragment = _dict
                 #the keys are ATOMS!
                 #print z_keys
         if ct>0:
