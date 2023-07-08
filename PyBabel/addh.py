@@ -278,9 +278,9 @@ class AddHydrogens:
         mag = b_length / math.sqrt(h1[0] * h1[0] + h1[1] * h1[1] + h1[2] * h1[2])
         cH1 = [c[0] + (h1[0] * mag), c[1] + (h1[1] * mag), c[2] + (h1[2] * mag)]
 
-        atomic_number, type = self.type_added_hydrogen(atom)
+        atomic_number, _type = self.type_added_hydrogen(atom)
 
-        return [(cH1, atom, atomic_number, type)]
+        return [(cH1, atom, atomic_number, _type)]
 
     def add_methyl_hydrogen(self, atom, b_length):
         """ """
@@ -322,8 +322,8 @@ class AddHydrogens:
         v = vec3(c3, c2, b_length)
         coordsH = [c[0] + v[0], c[1] + v[1], c[2] + v[2]]
 
-        atomic_number, type = self.type_added_hydrogen(atom)
-        return [(coordsH, atom, atomic_number, type)]
+        atomic_number, _type = self.type_added_hydrogen(atom)
+        return [(coordsH, atom, atomic_number, _type)]
 
     def add_tertiary_hydrogen(self, atom, b_length):
         """ """
@@ -350,8 +350,8 @@ class AddHydrogens:
         mag = b_length / math.sqrt(s[0] * s[0] + s[1] * s[1] + s[2] * s[2])
         cH = [c[0] + (s[0] * mag), c[1] + (s[1] * mag), c[2] + (s[2] * mag)]
 
-        atomic_number, type = self.type_added_hydrogen(atom)
-        return [(cH, atom, atomic_number, type)]
+        atomic_number, _type = self.type_added_hydrogen(atom)
+        return [(cH, atom, atomic_number, _type)]
 
     def add_methylene_hydrogens(self, atom, b_length, addedH=None):
         """ """
@@ -385,10 +385,10 @@ class AddHydrogens:
         mag = b_length / math.sqrt(h2[0] * h2[0] + h2[1] * h2[1] + h2[2] * h2[2])
         cH2 = [c[0] + (h2[0] * mag), c[1] + (h2[1] * mag), c[2] + (h2[2] * mag)]
 
-        atomic_number, type = self.type_added_hydrogen(atom)
+        atomic_number, _type = self.type_added_hydrogen(atom)
 
-        return [(cH1, atom, atomic_number, type),
-                (cH2, atom, atomic_number, type)]
+        return [(cH1, atom, atomic_number, _type),
+                (cH2, atom, atomic_number, _type)]
 
     def add_sp2_hydrogen(self, atom, b_length):
         """ """
@@ -407,8 +407,8 @@ class AddHydrogens:
 
         coordsH = [c[0] + (s[0] * mag), c[1] + (s[1] * mag), c[2] + (s[2] * mag)]
 
-        atomic_number, type = self.type_added_hydrogen(atom)
-        return [(coordsH, atom, atomic_number, type)]
+        atomic_number, _type = self.type_added_hydrogen(atom)
+        return [(coordsH, atom, atomic_number, _type)]
 
     def add_sp_hydrogen(self, atom, b_length):
         """ """
@@ -422,8 +422,8 @@ class AddHydrogens:
         v = vec3(c2, c, b_length)
         coordsH = [c[0] + v[0], c[1] + v[1], c[2] + v[2]]
 
-        atomic_number, type = self.type_added_hydrogen(atom)
-        return [(coordsH, atom, atomic_number, type)]
+        atomic_number, _type = self.type_added_hydrogen(atom)
+        return [(coordsH, atom, atomic_number, _type)]
 
     def add_vinyl_hydrogens(self, atom, b_length):
         """ """

@@ -98,7 +98,7 @@ if __name__ == '__main__':
     # -m mode
     mode = 'automatic'
     # -d dictionary
-    dict = None
+    _dict = None
 
     # 'l:vo:d:A:CKU:B:R:MFI:Zgs'
     for o, a in opt_list:
@@ -116,7 +116,7 @@ if __name__ == '__main__':
             if verbose:
                 print('set outputfilename to ', a)
         if o in ('-d', '--d'):
-            dict = a
+            _dict = a
             if verbose:
                 print('set dict to ', a)
         if o in ('-A', '--A'):
@@ -222,7 +222,7 @@ if __name__ == '__main__':
     LPO = AD4LigandPreparation(mol, mode, repairs, charges_to_add,
                                cleanup, allowed_bonds, root,
                                outputfilename=outputfilename,
-                               dict=dict, check_for_fragments=check_for_fragments,
+                               dict_file=_dict, check_for_fragments=check_for_fragments,
                                bonds_to_inactivate=bonds_to_inactivate,
                                inactivate_all_torsions=inactivate_all_torsions,
                                attach_nonbonded_fragments=attach_nonbonded_fragments,
